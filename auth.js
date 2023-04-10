@@ -13,6 +13,7 @@ async function getRedditAccessToken() {
         method: 'POST',
         body: body,
         headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
             'Authorization': authenticationHeader
         }
     })
@@ -34,3 +35,5 @@ async function getRedditCredentials() {
         'password': process.env.PASSWORD
     }
 }
+
+module.exports = getRedditAccessToken;
