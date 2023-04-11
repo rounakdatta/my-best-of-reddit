@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer');
 
 // this function downloads the post as image through Shareddit
 async function downloadRedditPostAsImage(postId, subRedditName, accessToken) {
+  console.log(`downloading post ${postId} from r/${subRedditName}`)
   const browser = await puppeteer.launch({
     args: ['--no-sandbox'],
     headless: false

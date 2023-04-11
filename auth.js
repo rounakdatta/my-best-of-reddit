@@ -20,7 +20,7 @@ async function getRedditAccessToken() {
 
     // occasionally the endpoint throws 429 (too many requests)
     if (!response.ok) {
-        throw new Error(`Access token request calling failed with status code ${response.status}`)
+        throw new Error(`HTTP request for obtaining temporary access token failed with status code ${response.status}`)
     }
 
     const responseBody = await response.json()
@@ -36,4 +36,4 @@ async function getRedditCredentials() {
     }
 }
 
-module.exports = getRedditAccessToken;
+module.exports = { getRedditAccessToken, getRedditCredentials };
