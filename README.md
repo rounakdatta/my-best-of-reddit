@@ -4,7 +4,7 @@
 
 Get your upvoted posts and comments from Reddit delivered over Telegram.
 - Preserve the gold you discover on the internet
-- Make these searchable by uploading it to Google Photos or a similar OCR-supported platform
+- Make the text in the images searchable by uploading it to Google Photos or a similar OCR-supported platform
 
 ## Get started
 To use the service, you can choose to use my hosted version [@MyBestOfRedditBot](t.me/MyBestOfRedditBot), or self-host it yourself. Self-hosting is recommended if you're paranoid about me storing your Reddit [^1] credentials.
@@ -21,6 +21,6 @@ The application takes care of de-duplicating posts, and doesn't send the same po
 
 ## Credits
 - The heavylifting of generating a beautiful image of a Reddit post is the credit of the [Shareddit](https://github.com/logankuzyk/shareddit) project. For this application, I am using [my custom fork](https://github.com/rounakdatta/shareddit) which supports some additional functionalities atop that.
-- The logo for the image was generated [Gooey](https://gooey.ai) which is a cool platform for running Stable Diffusion Img2Img models.
+- The logo for the project was generated [Gooey](https://gooey.ai) which is a cool platform for running Stable Diffusion Img2Img models.
 
 [^1]: There is a saying that your Reddit account can say more about your personality that your Google account / something else ;)
