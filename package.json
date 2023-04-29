@@ -2,12 +2,12 @@
   "name": "my-best-of-reddit",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "telegram.js",
   "dependencies": {
     "agent-base": "^6.0.2",
     "balanced-match": "^1.0.2",
     "base64-js": "^1.5.1",
-    "better-sqlite3": "^8.3.0",
+    "better-sqlite3": "^8.1.0",
     "bl": "^4.1.0",
     "brace-expansion": "^1.1.11",
     "buffer": "^5.7.1",
@@ -65,6 +65,7 @@
     "yauzl": "^2.10.0"
   },
   "scripts": {
+    "start": "node telegram.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

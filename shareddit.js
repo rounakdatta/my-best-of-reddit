@@ -6,13 +6,13 @@ const fs = require('fs');
 async function downloadRedditPostAsImage(userId, postId, subRedditName, accessToken) {
   console.log(`downloading post ${postId} from r/${subRedditName}`)
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox'],
-    headless: false
+    executablePath: '/usr/bin/google-chrome',
+    args: ['--no-sandbox']
     });
   const page = await browser.newPage();
 
   // we use a custom download path for each user
-  const downloadPath = path.join(__dirname, userId);
+  const downloadPath = path.join(__dirname, "data", userId);
   if (!fs.existsSync(downloadPath)) {
     fs.mkdirSync(downloadPath, { recursive: true });
   }

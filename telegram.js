@@ -3,12 +3,18 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = process.env.TELEGRAM_TOKEN;
 const bot = new TelegramBot(token, {polling: true});
 
-const db = require('better-sqlite3')('mybor.db');
-db.pragma('journal_mode = WAL');
-
 const processAllPendingPostsForUser = require('./processor.js')
 const path = require('path');
 const fs = require('fs');
+
+// we create the directory first where the sqlite database would be stored
+const databasePath = path.join(__dirname, "data");
+if (!fs.existsSync(databasePath)) {
+  fs.mkdirSync(databasePath, { recursive: true });
+}
+
+const db = require('better-sqlite3')(`${databasePath}/mybor.db`);
+db.pragma('journal_mode = WAL');
 
 const schedule = require('node-schedule');
 const autoProcessingSchedule = process.env.AUTO_SCHEDULE;
@@ -41,7 +47,7 @@ bot.onText(/\/authorize/, (msg) => {
         }
         try {
             db.prepare("INSERT INTO credentials (chat_id, user_name, password, client_id, client_secret) VALUES (@chatId, @username, @password, @clientId, @clientSecret)").run(db_row);
-            bot.sendMessage(msg.chat.id, "Ok, now use /getty anytime you want to receive your upvoted posts")
+            bot.sendMessage(msg.chat.id, "Ok, now use /getall anytime you want to receive your upvoted posts")
         } catch (err) {
             if (err.code === "SQLITE_CONSTRAINT_UNIQUE") {
                 bot.sendMessage(msg.chat.id, "Your credentials are already stored, use /clear if you want to reset them")
@@ -72,7 +78,7 @@ bot.onText(/\/getall/, (msg) => {
     bot.sendMessage(msg.chat.id, "Processing started");
     processAllPendingPostsForUser(chatId, credentials)
     .then(() => {
-        const baseDirectory = path.join(__dirname, chatId);
+        const baseDirectory = path.join(__dirname, "data", chatId);
         const imageFiles = fs.readdirSync(baseDirectory);
 
         imageFiles.forEach(imgFileName => {
@@ -100,7 +106,7 @@ function processPendingCollection() {
         // fetch all the unfetched posts of that user
         processAllPendingPostsForUser(chatId, credentials)
         .then(() => {
-            const baseDirectory = path.join(__dirname, chatId);
+            const baseDirectory = path.join(__dirname, "data", chatId);
             const imageFiles = fs.readdirSync(baseDirectory);
     
             imageFiles.forEach(imgFileName => {
