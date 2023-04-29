@@ -7,7 +7,13 @@ Get your upvoted posts and comments from Reddit delivered over Telegram.
 - Make the text in the images searchable by uploading it to Google Photos or a similar OCR-supported platform
 
 ## Get started
-To use the service, you can choose to use my hosted version [@MyBestOfRedditBot](https://t.me/MyBestOfRedditBot), or self-host it yourself. Self-hosting is recommended if you're paranoid about me storing your Reddit [^1] credentials.
+To use the service, you can choose to use my hosted version [@MyBestOfRedditBot](https://t.me/MyBestOfRedditBot), or self-host it yourself. Self-hosting is recommended if you're paranoid about me storing your Reddit [^1] credentials and data.
+
+Once on a chat with the bot,
+- Use `/start` to get initial instructions
+- Use `/authorize <>` to send in your credentials
+- Use `/getall` to get all the images the application has retrieved so far
+- Use `/clear` to delete your credentials from the application's database
 
 ### Run it directly (not recommended, development only)
 1. Use [@BotFather](https://t.me/BotFather) bot on Telegram to create your own bot credentials.
