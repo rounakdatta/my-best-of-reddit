@@ -15,6 +15,9 @@ Once on a chat with the bot,
 - Use `/getall` to get all the images the application has retrieved so far
 - Use `/clear` to delete your credentials from the application's database
 
+Here is an example screenshot of how the screenshots look like:
+<img src="assets/example_post.png" width="400">
+
 ### Run it directly (not recommended, development only)
 1. Use [@BotFather](https://t.me/BotFather) bot on Telegram to create your own bot credentials.
 2. `npm install` to install dependencies.
@@ -35,7 +38,7 @@ And then just run
 docker run -e TELEGRAM_TOKEN="<>" -e AUTO_SCHEDULE="<>" my-best-of-reddit
 ```
 
-When running in production mode, make sure to mount a persistent volume to the container path `/usr/src/app/data` where the database and all the post images would be stored.
+When running in production mode, make sure to mount a persistent volume to the container path `/usr/src/app/data` where the database and all the post images would be stored. You can find a sample Nomad job specification [here](https://github.com/rounakdatta/homelab.setup/blob/main/roles/launch-nomad-jobs/templates/my_best_of_reddit.nomad.j2).
 
 The application takes care of de-duplicating posts in scheduled sends, and doesn't send the same posts repeatedly. The state is stored in a SQLite database.
 
