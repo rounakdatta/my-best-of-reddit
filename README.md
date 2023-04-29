@@ -15,8 +15,10 @@ Once on a chat with the bot,
 - Use `/getall` to get all the images the application has retrieved so far
 - Use `/clear` to delete your credentials from the application's database
 
-Here is an example screenshot of how the screenshots look like:
-<img src="assets/example_post.png" width="400">
+Here is an example screenshot of how the screenshots look like (red-highlighted comments are upvoted):
+
+
+<kbd> <img src="assets/example_post.png" width="400">  </kbd>
 
 ### Run it directly (not recommended, development only)
 1. Use [@BotFather](https://t.me/BotFather) bot on Telegram to create your own bot credentials.
