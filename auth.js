@@ -1,9 +1,7 @@
 const fetch = require('node-fetch')
 
 // this function generates the short-lived access token from the fixed credentials
-async function getRedditAccessToken() {
-    const credentials = await getRedditCredentials();
-
+async function getRedditAccessToken(credentials) {
     const url = 'https://www.reddit.com/api/v1/access_token';
     const body = `grant_type=password&username=${credentials.username}&password=${credentials.password}`;
     const basicAuth = `${credentials.clientId}:${credentials.clientSecret}`;
