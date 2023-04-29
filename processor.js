@@ -2,7 +2,7 @@ const { getRedditAccessToken } = require('./auth.js')
 const getUpvotedPosts = require('./posts.js')
 const downloadRedditPostAsImage = require('./shareddit.js')
 
-async function processForUser(userId, credentials) {
+async function processAllPendingPostsForUser(userId, credentials) {
     const accessToken = await getRedditAccessToken(credentials);
 
     // get the list of (subreddit, postId) of upvoted posts
@@ -18,4 +18,4 @@ async function processForUser(userId, credentials) {
       })
 }
 
-module.exports = processForUser;
+module.exports = processAllPendingPostsForUser;

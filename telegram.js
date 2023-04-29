@@ -6,11 +6,16 @@ const bot = new TelegramBot(token, {polling: true});
 const db = require('better-sqlite3')('mybor.db');
 db.pragma('journal_mode = WAL');
 
-const processForUser = require('./processor.js')
+const processAllPendingPostsForUser = require('./processor.js')
 const path = require('path');
 const fs = require('fs');
 
+const schedule = require('node-schedule');
+const autoProcessingSchedule = process.env.AUTO_SCHEDULE;
+
 db.exec("CREATE TABLE IF NOT EXISTS credentials (id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id TEXT UNIQUE, user_name TEXT, password TEXT, client_id TEXT, client_secret TEXT)");
+// we keep it simple here, and not link them across via a foreign key
+db.exec("CREATE TABLE IF NOT EXISTS processed_state (id INTEGER PRIMARY KEY AUTOINCREMENT, chat_id TEXT, post_id TEXT, processed BOOLEAN CHECK (processed IN (0, 1)))");
 
 bot.onText(/\/start/, (msg) => {
     bot.sendMessage(msg.chat.id, "Welcome! Let's collect all your Reddit upvotes. Type /help to get started");
@@ -53,7 +58,8 @@ bot.onText(/\/clear/, (msg) => {
     bot.sendMessage(msg.chat.id, "Credentials cleared");
 });
 
-bot.onText(/\/getty/, (msg) => {
+// this is applicable when the user is explicitly requesting for all the posts
+bot.onText(/\/getall/, (msg) => {
     const chatId = msg.chat.id.toString()
     const credentialsRow = db.prepare('SELECT * FROM credentials WHERE chat_id = ?').get(chatId);
     const credentials = {
@@ -64,7 +70,7 @@ bot.onText(/\/getty/, (msg) => {
     }
 
     bot.sendMessage(msg.chat.id, "Processing started");
-    processForUser(chatId, credentials)
+    processAllPendingPostsForUser(chatId, credentials)
     .then(() => {
         const baseDirectory = path.join(__dirname, chatId);
         const imageFiles = fs.readdirSync(baseDirectory);
@@ -76,4 +82,46 @@ bot.onText(/\/getty/, (msg) => {
 
         bot.sendMessage(msg.chat.id, "Your upvoted posts are ready!");
     })
+});
+
+// this is the scheduled function which only fetches the pending (unprocessed) posts
+function processPendingCollection() {
+    // (1) bring in the credentials of all the users we have in record
+    const credentialsRows = db.prepare('SELECT * FROM credentials').all()
+    credentialsRows.forEach(credentialsRow => {
+        const chatId = credentialsRow.chat_id;
+        const credentials = {
+            'clientId': credentialsRow.client_id,
+            'clientSecret': credentialsRow.client_secret,
+            'username': credentialsRow.user_name,
+            'password': credentialsRow.password
+        }
+        
+        // fetch all the unfetched posts of that user
+        processAllPendingPostsForUser(chatId, credentials)
+        .then(() => {
+            const baseDirectory = path.join(__dirname, chatId);
+            const imageFiles = fs.readdirSync(baseDirectory);
+    
+            imageFiles.forEach(imgFileName => {
+                // we check if the particular image file has been processed or not
+                const existsRow = db.prepare('SELECT * FROM processed_state WHERE chat_id = ? AND post_id = ?').get(chatId, imgFileName);
+                // condition where the row doesn't exist or `processed` is FALSE
+                if (!existsRow || existsRow.processed === 0) {
+                    const fullImgFileName = path.join(baseDirectory, imgFileName);
+                    bot.sendPhoto(chatId, fullImgFileName)
+                    db.prepare('INSERT INTO processed_state (chat_id, post_id, processed) VALUES (?, ?, 1)').run(chatId, imgFileName);
+                }
+            });
+    
+            bot.sendMessage(chatId, "Your upvoted posts are ready!");
+        });
+
+    })
+  }
+  
+// say '0 18 * * *' for everyday at 6pm
+// say '*/5 * * * *' for every 5 minutes
+const job = schedule.scheduleJob(autoProcessingSchedule, function() {
+    processPendingCollection();
 });
