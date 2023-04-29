@@ -35,6 +35,8 @@ And then just run
 docker run -e TELEGRAM_TOKEN="<>" -e AUTO_SCHEDULE="<>" my-best-of-reddit
 ```
 
+When running in production mode, make sure to mount a persistent volume to the container path `/usr/src/app/data` where the database and all the post images would be stored.
+
 The application takes care of de-duplicating posts in scheduled sends, and doesn't send the same posts repeatedly. The state is stored in a SQLite database.
 
 ## Credits
