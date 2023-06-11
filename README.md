@@ -46,6 +46,6 @@ The application takes care of de-duplicating posts in scheduled sends, and doesn
 
 ## Credits
 - The heavylifting of generating a beautiful image of a Reddit post is the credit of the [Shareddit](https://github.com/logankuzyk/shareddit) project. For this application, I am using [my custom fork](https://github.com/rounakdatta/shareddit) which supports some additional functionalities atop that.
-- The logo for the project was generated [Gooey](https://gooey.ai) which is a cool platform for running Stable Diffusion Img2Img models.
+- The logo for the project was generated using [Gooey](https://gooey.ai) which is a cool platform for running Stable Diffusion Img2Img models.
 
 [^1]: There is a saying that your Reddit account can say more about your personality that your Google account / something else ;)

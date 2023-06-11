@@ -83,7 +83,7 @@ bot.onText(/\/getall/, (msg) => {
 
         imageFiles.forEach(imgFileName => {
             const fullImgFileName = path.join(baseDirectory, imgFileName);
-            bot.sendPhoto(msg.chat.id, fullImgFileName)
+            bot.sendDocument(msg.chat.id, fullImgFileName)
         });
 
         bot.sendMessage(msg.chat.id, "Your upvoted posts are ready!");
@@ -115,7 +115,7 @@ function processPendingCollection() {
                 // condition where the row doesn't exist or `processed` is FALSE
                 if (!existsRow || existsRow.processed === 0) {
                     const fullImgFileName = path.join(baseDirectory, imgFileName);
-                    bot.sendPhoto(chatId, fullImgFileName)
+                    bot.sendDocument(chatId, fullImgFileName)
                     db.prepare('INSERT INTO processed_state (chat_id, post_id, processed) VALUES (?, ?, 1)').run(chatId, imgFileName);
                 }
             });
